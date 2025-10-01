@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit Post{% else %}Create Post{% endif %}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto p-5">
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-3xl font-black mb-6">{% if form.instance.pk %}Edit Your Post{% else %}Create a New Post{% endif %}</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="space-y-4">
+                <div>
+                    <label for="id_title" class="block text-sm font-bold text-gray-700">Title</label>
+                    {{ form.title }}
+                </div>
+                <div>
+                    <label for="id_content" class="block text-sm font-bold text-gray-700">Content</label>
+                    {{ form.content }}
+                </div>
+                <div>
+                    <label for="id_image" class="block text-sm font-bold text-gray-700">Image</label>
+                    {{ form.image }}
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-5 rounded-md hover:bg-blue-700 mt-6">Save Post</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('input, textarea').forEach(el => {
+        el.classList.add('w-full', 'p-2.5', 'border', 'border-gray-300', 'rounded-md', 'mt-1');
+    });
+    document.querySelector('input[type="file"]').classList.add('p-0', 'border-none');
+</script>
+{% endblock %}

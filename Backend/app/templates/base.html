@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}eyezs Blog{% endblock %}</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 flex flex-col min-h-screen">
+
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="{% url 'home' %}" class="font-black text-3xl">eyezs</a>
+            <nav class="hidden md:flex items-center space-x-6">
+                <a href="{% url 'home' %}" class="font-bold text-gray-800 hover:text-blue-600">Home</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'post_create' %}" class="font-bold text-gray-800 hover:text-blue-600">New Post</a>
+                {% endif %}
+            </nav>
+            <div class="flex items-center space-x-4">
+                {% if user.is_authenticated %}
+                    <a href="#" class="font-bold hidden sm:block">Welcome, {{ user.username }}</a>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-red-500 text-white font-bold py-2 px-5 rounded-md hover:bg-red-600">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="font-bold hidden sm:block hover:text-blue-600">Login</a>
+                    <a href="{% url 'signup' %}" class="bg-blue-600 text-white font-bold py-2 px-5 rounded-md hover:bg-blue-700">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center p-10">
+        <p>&copy; {% now "Y" %} eyezs. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
