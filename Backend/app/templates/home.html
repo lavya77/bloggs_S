@@ -3,44 +3,72 @@
 {% block title %}Home - eyezs Blog{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto p-5">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <section class="text-center py-16">
-        <p class="uppercase font-bold tracking-widest text-gray-500">BLOG LIKE A PRO</p>
-        <h1 class="text-5xl md:text-6xl font-black my-4">Inspiring your best blogging journey</h1>
+    <section class="text-center py-12 md:py-16">
+        <p class="text-sm font-semibold uppercase tracking-widest text-indigo-600">BLOG LIKE A PRO</p>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mt-2 tracking-tight">Inspiring your best blogging journey</h1>
     </section>
 
-    <section class="bg-white p-5 rounded-lg shadow-sm mb-8">
-        <form action="{% url 'search_results' %}" method="get" class="flex flex-col md:flex-row gap-4">
-            <input type="search" name="q" placeholder="Search posts..." class="flex-grow p-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-5 rounded-md hover:bg-blue-700">Search</button>
+    <section class="bg-white p-6 rounded-xl shadow-md mb-10">
+        <form action="{% url 'search_results' %}" method="get" class="flex items-center gap-4">
+            <input 
+                type="search" 
+                name="q" 
+                placeholder="Search for posts by title or content..." 
+                class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+            >
+            <button 
+                type="submit" 
+                class="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+            >
+                Search
+            </button>
         </form>
     </section>
 
-    <section class="space-y-8">
+    <section class="space-y-12">
         {% for post in posts %}
-            <article class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-                {% if post.image %}
-                    <a href="{% url 'post_detail' post.pk %}"><img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-72 object-cover"></a>
-                {% endif %}
-                <div class="p-6">
-                    <p class="text-sm text-gray-500 mb-2">By <span class="font-bold text-gray-700">{{ post.author.username }}</span> on {{ post.date_posted|date:"F d, Y" }}</p>
-                    <h2 class="text-3xl font-bold mb-2"><a href="{% url 'post_detail' post.pk %}" class="text-gray-900 hover:text-blue-700">{{ post.title }}</a></h2>
-                    <p class="text-gray-600 leading-relaxed">{{ post.content|truncatewords:30 }}</p>
+            <article class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl">
+                <div class="p-6 md:p-8">
+                    <div class="flex items-center mb-3 text-sm text-gray-500">
+                        <span class="font-semibold text-gray-800">{{ post.author }}</span>
+                        <span class="mx-2">&middot;</span>
+                        <span>{{ post.date_posted|date:"F d, Y" }}</span>
+                    </div>
+
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4 leading-tight">
+                        <a href="{% url 'post_detail' post.pk %}" class="hover:text-indigo-600 transition-colors duration-200">
+                            {{ post.title }}
+                        </a>
+                    </h2>
+
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        {{ post.description|truncatewords:40 }}
+                    </p>
                     
-                    <div class="mt-5 pt-4 border-t border-gray-200 flex items-center gap-5 text-gray-600">
-                        <div class="flex items-center gap-2 font-bold">
-                            <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
-                            <span>{{ post.likes.count }} Likes</span>
+                    <div class="mt-6 pt-4 border-t border-gray-200 flex justify-between items-center text-sm">
+                        <div class="flex items-center gap-5 text-gray-600 font-medium">
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                                <span>{{ post.total_likes }} Likes</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.083-3.083A7.002 7.002 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.832 14.168L5.92 11.083A5.002 5.002 0 004 10c0-2.761 2.686-5 6-5s6 2.239 6 5-2.686 5-6 5a6.973 6.973 0 01-3.083-.832L4.832 14.168z" clip-rule="evenodd"></path></svg>
+                                <span>{{ post.comments.count }} Comments</span>
+                            </div>
                         </div>
-                        <a href="{% url 'post_detail' post.pk %}#comments" class="flex items-center gap-2 font-bold hover:text-blue-600">
-                           <span>{{ post.comments.count }} Comments</span>
+                        <a href="{% url 'post_detail' post.pk %}" class="font-bold text-indigo-600 hover:underline">
+                            Read More &rarr;
                         </a>
                     </div>
                 </div>
             </article>
         {% empty %}
-            <p class="text-center text-gray-500">No blog posts found.</p>
+            <div class="text-center py-16 bg-gray-50 rounded-lg">
+                <h3 class="text-xl font-medium text-gray-800">No Posts Yet</h3>
+                <p class="text-gray-500 mt-2">Check back later for new articles!</p>
+            </div>
         {% endfor %}
     </section>
 
